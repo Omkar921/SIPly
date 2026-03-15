@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SIPly Assistant</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Inter',sans-serif;background:#f0f2f8}
+body{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px}
+.card{width:100%;max-width:500px;height:92vh;max-height:780px;display:flex;flex-direction:column;border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 24px 64px rgba(13,31,94,0.14)}
+.hdr{background:#0d1f5e;padding:16px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.logo{width:40px;height:40px;background:white;border-radius:11px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px;color:#0d1f5e;flex-shrink:0}
+.htxt{flex:1}
+.htxt h1{color:white;font-size:15px;font-weight:600}
+.htxt p{color:rgba(255,255,255,0.45);font-size:11px;margin-top:2px;font-style:italic}
+.live{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.1);padding:4px 10px;border-radius:20px}
+.ldot{width:6px;height:6px;background:#22c55e;border-radius:50%;animation:glow 2s infinite}
+@keyframes glow{0%,100%{opacity:1}50%{opacity:0.3}}
+.live span{color:rgba(255,255,255,0.8);font-size:10px;font-weight:500}
+.chips{display:flex;gap:6px;padding:9px 14px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid #eef0f8;flex-shrink:0;background:#fff}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;font-size:11px;font-weight:500;padding:5px 13px;border-radius:20px;border:1px solid #dde3f5;background:#f4f6fd;color:#3a4a80;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif}
+.chip:hover{background:#0d1f5e;color:#fff}
+.msgs{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:14px}
+.msg{display:flex;gap:9px;max-width:90%;animation:pop .22s ease}
+@keyframes pop{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.msg.bot{align-self:flex-start}.msg.usr{align-self:flex-end;flex-direction:row-reverse}
+.av{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;margin-top:2px}
+.av.bot{background:#0d1f5e;color:white;font-size:13px}
+.av.usr{background:#eef0f8;color:#3a4a80;font-size:10px;border:1px solid #dde3f5}
+.bub{padding:11px 15px;border-radius:14px;font-size:14px;line-height:1.7;max-width:100%}
+.msg.bot .bub{background:#f5f7fd;border:1px solid #e8ecf8;border-radius:3px 14px 14px 14px;color:#1a2340}
+.msg.usr .bub{background:#0d1f5e;color:white;border-radius:14px 3px 14px 14px}
+.bub p{margin-bottom:8px}.bub p:last-child{margin-bottom:0}
+.bub ul{padding-left:20px;margin:7px 0}.bub li{margin-bottom:5px}
+.bub strong{font-weight:600;color:#0d1f5e}.msg.usr .bub strong{color:#a8c0ff}
+.bub a{color:#0d1f5e;font-weight:600;text-decoration:underline}
+.icard{background:#0d1f5e;border-radius:12px;padding:16px 17px;margin-bottom:11px}
+.itag{display:inline-block;background:rgba(255,255,255,0.13);color:rgba(255,255,255,0.85);font-size:10px;font-weight:600;padding:3px 9px;border-radius:20px;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:10px}
+.ihead{color:#fff;font-size:15px;font-weight:600;line-height:1.45;margin-bottom:8px}
+.isub{color:rgba(255,255,255,0.68);font-size:12.5px;line-height:1.65;margin-bottom:13px}
+.isub strong{color:#fff;font-weight:600}
+.ipills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{font-size:11px;font-weight:500;padding:5px 11px;border-radius:20px;border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.85);display:flex;align-items:center;gap:5px}
+.pdot{width:5px;height:5px;border-radius:50%;background:#22c55e;flex-shrink:0}
+.trow{display:flex;gap:9px;align-self:flex-start}
+.tbub{padding:13px 16px;background:#f5f7fd;border:1px solid #e8ecf8;border-radius:3px 14px 14px 14px;display:flex;gap:4px;align-items:center}
+.tbub span{width:6px;height:6px;border-radius:50%;background:#0d1f5e;opacity:0.3;animation:bounce 1.2s infinite}
+.tbub span:nth-child(2){animation-delay:.2s}.tbub span:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.3}30%{transform:translateY(-5px);opacity:1}}
+.inprow{padding:12px 14px;border-top:1px solid #eef0f8;display:flex;gap:8px;align-items:center;flex-shrink:0;background:#fff}
+.inprow input{flex:1;padding:12px 16px;border-radius:24px;border:1px solid #dde3f5;background:#f5f7fd;color:#1a2340;font-size:14px;font-family:'Inter',sans-serif;outline:none}
+.inprow input:focus{border-color:#0d1f5e;background:#fff}
+.inprow input::placeholder{color:#9aa5c8}
+.inprow input:disabled{opacity:0.5}
+.sbtn{width:42px;height:42px;border-radius:50%;background:#0d1f5e;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sbtn:disabled{opacity:0.4;cursor:not-allowed}
+.sbtn svg{width:16px;height:16px;fill:white}
+.foot{padding:8px;text-align:center;font-size:10px;color:#9aa5c8;background:#fff;flex-shrink:0}
+.foot a{color:#0d1f5e;font-weight:600;text-decoration:none}
+@media(max-width:480px){body{padding:0;align-items:flex-end}.card{height:100vh;max-height:100vh;border-radius:20px 20px 0 0}}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="hdr">
+    <div class="logo">S</div>
+    <div class="htxt"><h1>SIPly Assistant</h1><p>"The only EdTech &amp; career platform that pays you back."</p></div>
+    <div class="live"><div class="ldot"></div><span>Online</span></div>
+  </div>
+  <div class="chips" id="chips"></div>
+  <div class="msgs" id="msgs"></div>
+  <div class="inprow">
+    <input type="text" id="inp" placeholder="Ask me anything about SIPly..." autocomplete="off"/>
+    <button class="sbtn" id="sbtn" onclick="send()"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button>
+  </div>
+  <div class="foot"><a href="https://www.siplylearn.com" target="_blank">siplylearn.com</a> &nbsp;·&nbsp; 9K@siplylearn.com</div>
+</div>
+<script>
+var hist=[],busy=false;
+['What is SIPly?','How does the $84 work?','vs Coursera & Udemy','Will I get hired?','What will I learn?','Is SIPly legit?','ATS optimizer?','How do I start?'].forEach(function(c){var b=document.createElement('button');b.className='chip';b.textContent=c;b.onclick=function(){send(c);};document.getElementById('chips').appendChild(b);});
+function sd(){var m=document.getElementById('msgs');setTimeout(function(){m.scrollTop=m.scrollHeight;},60);}
+function addU(t){var el=document.createElement('div');el.className='msg usr';el.innerHTML='<div class="av usr">You</div><div class="bub"><p>'+t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</p></div>';document.getElementById('msgs').appendChild(el);sd();}
+function addB(h){var el=document.createElement('div');el.className='msg bot';el.innerHTML='<div class="av bot">S</div><div class="bub">'+h+'</div>';document.getElementById('msgs').appendChild(el);sd();}
+function showT(){if(document.getElementById('t'))return;var el=document.createElement('div');el.className='trow';el.id='t';el.innerHTML='<div class="av bot">S</div><div class="tbub"><span></span><span></span><span></span></div>';document.getElementById('msgs').appendChild(el);sd();}
+function hideT(){var t=document.getElementById('t');if(t)t.remove();}
+function setB(v){busy=v;document.getElementById('sbtn').disabled=v;document.getElementById('inp').disabled=v;}
+function md(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/^[-] (.+)$/gm,'<li>$1</li>').replace(/(<li>[\s\S]*?<\/li>\n?)+/g,function(m){return'<ul>'+m+'</ul>';}).replace(/\n\n+/g,'</p><p>').replace(/\n/g,'<br>').replace(/(https?:\/\/[^\s<"&]+)/g,'<a href="$1" target="_blank">$1</a>').replace(/^(?!<)(.+)$/gm,function(m){return m.trim()?'<p>'+m+'</p>':'';}).replace(/<p><\/p>/g,'');}
+async function send(chip){
+  var inp=document.getElementById('inp');
+  var text=(chip||inp.value).trim();
+  if(!text||busy)return;
+  inp.value='';
+  addU(text);
+  hist.push({role:'user',content:text});
+  setB(true);showT();
+  try{
+    var r=await fetch('/api/chat',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({messages:hist})});
+    var d=await r.json();
+    hideT();
+    if(d.reply){hist.push({role:'assistant',content:d.reply});addB(md(d.reply));}
+    else{addB('<p style="color:#dc2626">Error: '+(d.error||'something went wrong')+'</p>');hist.pop();}
+  }catch(e){hideT();addB('<p style="color:#dc2626">Connection error: '+e.message+'</p>');hist.pop();}
+  setB(false);
+}
+document.getElementById('inp').addEventListener('keydown',function(e){if(e.key==='Enter'&&!busy)send();});
+setTimeout(function(){addB('<div class="icard"><div class="itag">Meet SIPly</div><div class="ihead">The only EdTech &amp; career platform that pays you back.</div><div class="isub">SIPly maps the exact skills employers are hiring for right now, builds you a personalized AI-powered course bundle to master them in 8 weeks — and returns <strong>$84 to your pocket</strong> when you complete it. Your total cost? Just <strong>$28.</strong></div><div class="ipills"><div class="pill"><div class="pdot"></div>AI career mapping</div><div class="pill"><div class="pdot"></div>8-week skill plan</div><div class="pill"><div class="pdot"></div>AI job application tools</div><div class="pill"><div class="pdot"></div>Unique savings model</div></div></div><p>Want to know how it works, what it costs, or how it compares to Coursera, Udemy, or job boards? Ask me anything.</p>');},300);
+</script>
+</body>
+</html>
